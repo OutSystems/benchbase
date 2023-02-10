@@ -354,26 +354,22 @@
         <procedure name="Q14">
             <statement name="query_stmt">
                 SELECT
-                "l_returnflag",
-                "l_linestatus",
-                SUM("l_quantity") AS sum_qty,
-                SUM("l_extendedprice") AS sum_base_price,
-                SUM("l_extendedprice" * (1 - "l_discount")) AS sum_disc_price,
-                SUM("l_extendedprice" * (1 - "l_discount") * (1 + "l_tax")) AS sum_charge,
-                AVG("l_quantity") AS avg_qty,
-                AVG("l_extendedprice") AS avg_price,
-                AVG("l_discount") AS avg_disc,
-                COUNT(*) AS count_order
+                100.00 * SUM(
+                CASE
+                WHEN
+                "p_type" LIKE 'PROMO%'
+                THEN
+                "l_extendedprice" * (1 - "l_discount")
+                ELSE
+                0
+                END
+                ) / SUM("l_extendedprice" * (1 - "l_discount")) AS promo_revenue
                 FROM
-                "benchbase"."lineitem"
+                "benchbase"."lineitem", "benchbase"."part"
                 WHERE
-                "l_shipdate" &lt;= DATE '1998-12-01' - INTERVAL 1 DAY
-                GROUP BY
-                "l_returnflag",
-                "l_linestatus"
-                ORDER BY
-                "l_returnflag",
-                "l_linestatus"
+                "l_partkey" = "p_partkey"
+                AND "l_shipdate" &gt;= DATE '1993-01-01'
+                AND "l_shipdate" &lt; DATE '1993-01-01' + INTERVAL '1' MONTH
             </statement>
         </procedure>
 
