@@ -449,26 +449,39 @@
         <procedure name="Q18">
             <statement name="query_stmt">
                 SELECT
-                "l_returnflag",
-                "l_linestatus",
-                SUM("l_quantity") AS sum_qty,
-                SUM("l_extendedprice") AS sum_base_price,
-                SUM("l_extendedprice" * (1 - "l_discount")) AS sum_disc_price,
-                SUM("l_extendedprice" * (1 - "l_discount") * (1 + "l_tax")) AS sum_charge,
-                AVG("l_quantity") AS avg_qty,
-                AVG("l_extendedprice") AS avg_price,
-                AVG("l_discount") AS avg_disc,
-                COUNT(*) AS count_order
+                "c_name",
+                "c_custkey",
+                "o_orderkey",
+                "o_orderdate",
+                "o_totalprice",
+                SUM("l_quantity")
                 FROM
+                "benchbase"."customer",
+                "benchbase"."orders",
                 "benchbase"."lineitem"
                 WHERE
-                "l_shipdate" &lt;= DATE '1998-12-01' - INTERVAL 1 DAY
+                "o_orderkey" IN
+                (
+                SELECT
+                "l_orderkey"
+                FROM
+                "benchbase"."lineitem"
                 GROUP BY
-                "l_returnflag",
-                "l_linestatus"
+                "l_orderkey"
+                HAVING
+                SUM("l_quantity") > 315
+                )
+                AND "c_custkey" = "o_custkey"
+                AND "o_orderkey" = "l_orderkey"
+                GROUP BY
+                "c_name",
+                "c_custkey",
+                "o_orderkey",
+                "o_orderdate",
+                "o_totalprice"
                 ORDER BY
-                "l_returnflag",
-                "l_linestatus"
+                "o_totalprice" DESC,
+                "o_orderdate" LIMIT 100
             </statement>
         </procedure>
 
