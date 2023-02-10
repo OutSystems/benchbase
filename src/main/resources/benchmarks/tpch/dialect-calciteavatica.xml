@@ -158,26 +158,14 @@
         <procedure name="Q6">
             <statement name="query_stmt">
                 SELECT
-                "l_returnflag",
-                "l_linestatus",
-                SUM("l_quantity") AS sum_qty,
-                SUM("l_extendedprice") AS sum_base_price,
-                SUM("l_extendedprice" * (1 - "l_discount")) AS sum_disc_price,
-                SUM("l_extendedprice" * (1 - "l_discount") * (1 + "l_tax")) AS sum_charge,
-                AVG("l_quantity") AS avg_qty,
-                AVG("l_extendedprice") AS avg_price,
-                AVG("l_discount") AS avg_disc,
-                COUNT(*) AS count_order
+                SUM("l_extendedprice" * "l_discount") AS revenue
                 FROM
                 "benchbase"."lineitem"
                 WHERE
-                "l_shipdate" &lt;= DATE '1998-12-01' - INTERVAL 1 DAY
-                GROUP BY
-                "l_returnflag",
-                "l_linestatus"
-                ORDER BY
-                "l_returnflag",
-                "l_linestatus"
+                "l_shipdate" &gt;= DATE '1993-01-01'
+                AND "l_shipdate" &lt; DATE '1993-01-01' + INTERVAL '1' YEAR
+                AND "l_discount" BETWEEN 0.02 - 0.01 AND 0.02 + 0.01
+                AND "l_quantity" &lt; 24
             </statement>
         </procedure>
 
