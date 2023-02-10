@@ -488,26 +488,43 @@
         <procedure name="Q19">
             <statement name="query_stmt">
                 SELECT
-                "l_returnflag",
-                "l_linestatus",
-                SUM("l_quantity") AS sum_qty,
-                SUM("l_extendedprice") AS sum_base_price,
-                SUM("l_extendedprice" * (1 - "l_discount")) AS sum_disc_price,
-                SUM("l_extendedprice" * (1 - "l_discount") * (1 + "l_tax")) AS sum_charge,
-                AVG("l_quantity") AS avg_qty,
-                AVG("l_extendedprice") AS avg_price,
-                AVG("l_discount") AS avg_disc,
-                COUNT(*) AS count_order
+                SUM("l_extendedprice"* (1 - "l_discount")) AS revenue
                 FROM
-                "benchbase"."lineitem"
+                "benchbase"."lineitem",
+                "benchbase"."part"
                 WHERE
-                "l_shipdate" &lt;= DATE '1998-12-01' - INTERVAL 1 DAY
-                GROUP BY
-                "l_returnflag",
-                "l_linestatus"
-                ORDER BY
-                "l_returnflag",
-                "l_linestatus"
+                (
+                "p_partkey" = "l_partkey"
+                AND "p_brand" = 'Brand#11'
+                AND "p_container" IN ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')
+                AND "l_quantity" &gt;= 1
+                AND "l_quantity" &lt;= 1 + 10
+                AND "p_size" BETWEEN 1 AND 5
+                AND "l_shipmode" IN ('AIR', 'AIR REG')
+                AND "l_shipinstruct" = 'DELIVER IN PERSON'
+                )
+                OR
+                (
+                "p_partkey" = "l_partkey"
+                AND "p_brand" = 'Brand#22'
+                AND "p_container" IN ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK')
+                AND "l_quantity" &gt;= 10
+                AND "l_quantity" &lt;= 10 + 10
+                AND "p_size" BETWEEN 1 AND 10
+                AND "l_shipmode" IN ('AIR', 'AIR REG')
+                AND "l_shipinstruct" = 'DELIVER IN PERSON'
+                )
+                OR
+                (
+                "p_partkey" = "l_partkey"
+                AND "p_brand" = 'Brand#33'
+                AND "p_container" IN ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG')
+                AND "l_quantity" &gt;= 20
+                AND "l_quantity" &lt;= 20 + 10
+                AND "p_size" BETWEEN 1 AND 15
+                AND "l_shipmode" IN ('AIR', 'AIR REG')
+                AND "l_shipinstruct" = 'DELIVER IN PERSON'
+                )
             </statement>
         </procedure>
 
