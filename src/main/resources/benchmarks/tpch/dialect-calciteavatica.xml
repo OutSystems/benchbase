@@ -84,7 +84,28 @@
 
         <procedure name="Q4">
             <statement name="query_stmt">
-                SELECT ?, ?
+                SELECT
+                "o_orderpriority",
+                COUNT(*) AS order_count
+                FROM
+                "benchbase"."orders"
+                WHERE
+                "o_orderdate" &gt;= DATE '1993-01-01'
+                AND "o_orderdate" &lt; DATE '1993-01-01' + INTERVAL '3' MONTH
+                AND EXISTS
+                (
+                SELECT
+                *
+                FROM
+                "benchbase"."lineitem"
+                WHERE
+                "l_orderkey" = "o_orderkey"
+                AND "l_commitdate" &lt; "l_receiptdate"
+                )
+                GROUP BY
+                "o_orderpriority"
+                ORDER BY
+                "o_orderpriority"
             </statement>
         </procedure>
 
@@ -101,10 +122,10 @@
                 FROM
                 "benchbase"."lineitem"
                 WHERE
-                "l_shipdate" &gt;= DATE ?
-                AND "l_shipdate" &lt; DATE ? + INTERVAL '1' YEAR
-                AND "l_discount" BETWEEN ? - 0.01 AND ? + 0.01
-                AND "l_quantity" &lt; ?
+                "l_shipdate" &gt;= DATE '1993-01-01'
+                AND "l_shipdate" &lt; DATE '1993-01-01' + INTERVAL '1' YEAR
+                AND "l_discount" BETWEEN 0.02 - 0.01 AND 0.02 + 0.01
+                AND "l_quantity" &lt; 24
             </statement>
         </procedure>
 
@@ -167,8 +188,8 @@
                 "benchbase"."lineitem", "benchbase"."part"
                 WHERE
                 "l_partkey" = "p_partkey"
-                AND "l_shipdate" &gt;= DATE ?
-                AND "l_shipdate" &lt; DATE ? + INTERVAL '1' MONTH
+                AND "l_shipdate" &gt;= DATE '1993-01-01'
+                AND "l_shipdate" &lt; DATE '1993-01-01' + INTERVAL '1' MONTH
             </statement>
         </procedure>
 
@@ -316,7 +337,7 @@
                 FROM
                 "benchbase"."part"
                 WHERE
-                "p_name" LIKE ?
+                "p_name" LIKE 'green%'
                 )
                 AND "ps_availqty" &gt; (
                 SELECT
@@ -326,11 +347,11 @@
                 WHERE
                 "l_partkey" = "ps_partkey"
                 AND "l_suppkey" = "ps_suppkey"
-                AND "l_shipdate" &gt;= DATE ?
-                AND "l_shipdate" &lt; DATE ? + INTERVAL '1' YEAR )
+                AND "l_shipdate" &gt;= DATE '1994-01-01'
+                AND "l_shipdate" &lt; DATE '1994-01-01' + INTERVAL '1' YEAR )
                 )
                 AND "s_nationkey" = "n_nationkey"
-                AND "n_name" = ?
+                AND "n_name" = 'BRAZIL'
                 ORDER BY
                 "s_name"
             </statement>
