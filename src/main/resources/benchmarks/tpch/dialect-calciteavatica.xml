@@ -17,7 +17,7 @@
                 FROM
                 "benchbase"."lineitem"
                 WHERE
-                "l_shipdate" &lt;= DATE '1998-12-01' - INTERVAL 1 DAY
+                "l_shipdate" &lt;= DATE '1998-12-01' - INTERVAL ? DAY
                 GROUP BY
                 "l_returnflag",
                 "l_linestatus"
@@ -47,11 +47,11 @@
                 WHERE
                 "p_partkey" = "ps_partkey"
                 AND "s_suppkey" = "ps_suppkey"
-                AND "p_size" = 25
-                AND "p_type" LIKE '%STEEL'
+                AND "p_size" = ?
+                AND "p_type" LIKE ?
                 AND "s_nationkey" = "n_nationkey"
                 AND "n_regionkey" = "r_regionkey"
-                AND "r_name" = 'AMERICA'
+                AND "r_name" = ?
                 AND "ps_supplycost" =
                 (
                 SELECT
@@ -66,7 +66,7 @@
                 AND "s_suppkey" = "ps_suppkey"
                 AND "s_nationkey" = "n_nationkey"
                 AND "n_regionkey" = "r_regionkey"
-                AND "r_name" = 'AMERICA'
+                AND "r_name" = ?
                 )
                 ORDER BY
                 "s_acctbal" DESC,
@@ -90,8 +90,8 @@
                 FROM
                 "benchbase"."orders"
                 WHERE
-                "o_orderdate" &gt;= DATE '1993-01-01'
-                AND "o_orderdate" &lt; DATE '1993-01-01' + INTERVAL '3' MONTH
+                "o_orderdate" &gt;= DATE ?
+                AND "o_orderdate" &lt; DATE ? + INTERVAL '3' MONTH
                 AND EXISTS
                 (
                 SELECT
@@ -122,10 +122,10 @@
                 FROM
                 "benchbase"."lineitem"
                 WHERE
-                "l_shipdate" &gt;= DATE '1993-01-01'
-                AND "l_shipdate" &lt; DATE '1993-01-01' + INTERVAL '1' YEAR
-                AND "l_discount" BETWEEN 0.02 - 0.01 AND 0.02 + 0.01
-                AND "l_quantity" &lt; 24
+                "l_shipdate" &gt;= DATE ?
+                AND "l_shipdate" &lt; DATE ? + INTERVAL '1' YEAR
+                AND "l_discount" BETWEEN ? - 0.01 AND ? + 0.01
+                AND "l_quantity" &lt; ?
             </statement>
         </procedure>
 
@@ -188,8 +188,8 @@
                 "benchbase"."lineitem", "benchbase"."part"
                 WHERE
                 "l_partkey" = "p_partkey"
-                AND "l_shipdate" &gt;= DATE '1993-01-01'
-                AND "l_shipdate" &lt; DATE '1993-01-01' + INTERVAL '1' MONTH
+                AND "l_shipdate" &gt;= DATE ?
+                AND "l_shipdate" &lt; DATE ? + INTERVAL '1' MONTH
             </statement>
         </procedure>
 
@@ -220,8 +220,8 @@
                 "benchbase"."part"
                 WHERE
                 "p_partkey" = "l_partkey"
-                AND "p_brand" = 'Brand#11'
-                AND "p_container" = 'SM CASE'
+                AND "p_brand" = ?
+                AND "p_container" = ?
                 AND "l_quantity" &lt; (
                 SELECT
                 0.2 * AVG("l_quantity")
@@ -255,7 +255,7 @@
                 GROUP BY
                 "l_orderkey"
                 HAVING
-                SUM("l_quantity") &gt; 315
+                SUM("l_quantity") &gt; ?
                 )
                 AND "c_custkey" = "o_custkey"
                 AND "o_orderkey" = "l_orderkey"
@@ -281,10 +281,10 @@
                 WHERE
                 (
                 "p_partkey" = "l_partkey"
-                AND "p_brand" = 'Brand#11'
+                AND "p_brand" = ?
                 AND "p_container" IN ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')
-                AND "l_quantity" &gt;= 1
-                AND "l_quantity" &lt;= 1 + 10
+                AND "l_quantity" &gt;= ?
+                AND "l_quantity" &lt;= ? + 10
                 AND "p_size" BETWEEN 1 AND 5
                 AND "l_shipmode" IN ('AIR', 'AIR REG')
                 AND "l_shipinstruct" = 'DELIVER IN PERSON'
@@ -292,10 +292,10 @@
                 OR
                 (
                 "p_partkey" = "l_partkey"
-                AND "p_brand" = 'Brand#22'
+                AND "p_brand" = ?
                 AND "p_container" IN ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK')
-                AND "l_quantity" &gt;= 10
-                AND "l_quantity" &lt;= 10 + 10
+                AND "l_quantity" &gt;= ?
+                AND "l_quantity" &lt;= ? + 10
                 AND "p_size" BETWEEN 1 AND 10
                 AND "l_shipmode" IN ('AIR', 'AIR REG')
                 AND "l_shipinstruct" = 'DELIVER IN PERSON'
@@ -303,10 +303,10 @@
                 OR
                 (
                 "p_partkey" = "l_partkey"
-                AND "p_brand" = 'Brand#33'
+                AND "p_brand" = ?
                 AND "p_container" IN ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG')
-                AND "l_quantity" &gt;= 20
-                AND "l_quantity" &lt;= 20 + 10
+                AND "l_quantity" &gt;= ?
+                AND "l_quantity" &lt;= ? + 10
                 AND "p_size" BETWEEN 1 AND 15
                 AND "l_shipmode" IN ('AIR', 'AIR REG')
                 AND "l_shipinstruct" = 'DELIVER IN PERSON'
@@ -337,7 +337,7 @@
                 FROM
                 "benchbase"."part"
                 WHERE
-                "p_name" LIKE 'green%'
+                "p_name" LIKE ?
                 )
                 AND "ps_availqty" &gt; (
                 SELECT
@@ -347,11 +347,11 @@
                 WHERE
                 "l_partkey" = "ps_partkey"
                 AND "l_suppkey" = "ps_suppkey"
-                AND "l_shipdate" &gt;= DATE '1994-01-01'
-                AND "l_shipdate" &lt; DATE '1994-01-01' + INTERVAL '1' YEAR )
+                AND "l_shipdate" &gt;= DATE ?
+                AND "l_shipdate" &lt; DATE ? + INTERVAL '1' YEAR )
                 )
                 AND "s_nationkey" = "n_nationkey"
-                AND "n_name" = 'BRAZIL'
+                AND "n_name" = ?
                 ORDER BY
                 "s_name"
             </statement>
