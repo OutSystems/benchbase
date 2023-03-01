@@ -149,7 +149,37 @@
 
         <procedure name="Q10">
             <statement name="query_stmt">
-                SELECT ?, ?
+                SELECT
+                    "c_custkey",
+                    "c_name",
+                    SUM("l_extendedprice" * (1 - "l_discount")) AS revenue,
+                    "c_acctbal",
+                    "n_name",
+                    "c_address",
+                    "c_phone",
+                    "c_comment"
+                FROM
+                    "benchbase"."customer",
+                    "benchbase"."orders",
+                    "benchbase"."lineitem",
+                    "benchbase"."nation"
+                WHERE
+                    "c_custkey" = "o_custkey"
+                    AND "l_orderkey" = "o_orderkey"
+                    AND "o_orderdate" >= TO_DATE(?, 'YYYY-MM-DD')
+                    AND "o_orderdate" &lt; TO_DATE(?, 'YYYY-MM-DD') + INTERVAL '3' MONTH
+                    AND "l_returnflag" = 'R'
+                    AND "c_nationkey" = "n_nationkey"
+                GROUP BY
+                    "c_custkey",
+                    "c_name",
+                    "c_acctbal",
+                    "c_phone",
+                    "n_name",
+                    "c_address",
+                    "c_comment"
+                ORDER BY
+                    3 DESC LIMIT 20
             </statement>
         </procedure>
 
