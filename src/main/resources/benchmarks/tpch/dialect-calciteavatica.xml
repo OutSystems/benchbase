@@ -185,7 +185,31 @@
 
         <procedure name="Q11">
             <statement name="query_stmt">
-                SELECT ?, ?, ?
+                SELECT
+                    "ps_partkey",
+                    SUM("ps_supplycost" * "ps_availqty") AS "VALUE"
+                FROM
+                    "benchbase"."partsupp",
+                    "benchbase"."supplier",
+                    "benchbase"."nation"
+                WHERE
+                    "ps_suppkey" = "s_suppkey"
+                    AND "s_nationkey" = "n_nationkey"
+                    AND "n_name" = ?
+                GROUP BY
+                    "ps_partkey"
+                HAVING
+                    SUM("ps_supplycost" * "ps_availqty") > (
+                        SELECT
+                            SUM("ps_supplycost" * "ps_availqty") * ?
+                        FROM
+                            "benchbase"."partsupp", "benchbase"."supplier", "benchbase"."nation"
+                        WHERE
+                            "ps_suppkey" = "s_suppkey"
+                            AND "s_nationkey" = "n_nationkey"
+                            AND "n_name" = ? )
+                ORDER BY
+                    1 DESC
             </statement>
         </procedure>
 
