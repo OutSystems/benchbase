@@ -78,7 +78,28 @@
 
         <procedure name="Q3">
             <statement name="query_stmt">
-                SELECT ?, ?, ?
+                SELECT
+                    "l_orderkey",
+                    SUM("l_extendedprice" * (1 - "l_discount")) AS revenue,
+                    "o_orderdate",
+                    "o_shippriority"
+                FROM
+                    "benchbase"."customer",
+                    "benchbase"."orders",
+                    "benchbase"."lineitem"
+                WHERE
+                    "c_mktsegment" = (CAST (? AS VARCHAR))
+                    AND "c_custkey" = "o_custkey"
+                    AND "l_orderkey" = "o_orderkey"
+                    AND "o_orderdate" &lt; TO_DATE(?, 'YYYY-MM-DD')
+                    AND "l_shipdate" > TO_DATE(?, 'YYYY-MM-DD')
+                GROUP BY
+                    "l_orderkey",
+                    "o_orderdate",
+                    "o_shippriority"
+                ORDER BY
+                    2 DESC,
+                    "o_orderdate" LIMIT 10
             </statement>
         </procedure>
 
