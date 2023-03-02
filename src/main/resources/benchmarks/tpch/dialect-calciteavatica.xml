@@ -132,7 +132,30 @@
 
         <procedure name="Q5">
             <statement name="query_stmt">
-                SELECT ?, ?, ?
+                SELECT
+                    "n_name",
+                    SUM("l_extendedprice" * (1 - "l_discount")) AS revenue
+                FROM
+                    "benchbase"."customer",
+                    "benchbase"."orders",
+                    "benchbase"."lineitem",
+                    "benchbase"."supplier",
+                    "benchbase"."nation",
+                    "benchbase"."region"
+                WHERE
+                    "c_custkey" = "o_custkey"
+                    AND "l_orderkey" = "o_orderkey"
+                    AND "l_suppkey" = "s_suppkey"
+                    AND "c_nationkey" = "s_nationkey"
+                    AND "s_nationkey" = "n_nationkey"
+                    AND "n_regionkey" = "r_regionkey"
+                    AND "r_name" = (CAST(? AS VARCHAR))
+                    AND "o_orderdate" >= TO_DATE(?, 'YYYY-MM-DD')
+                    AND "o_orderdate" &lt; TO_DATE(?, 'YYYY-MM-DD') + INTERVAL '1' YEAR
+                GROUP BY
+                    "n_name"
+                ORDER BY
+                    2 DESC
             </statement>
         </procedure>
 
