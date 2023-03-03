@@ -22,6 +22,7 @@ import com.oltpbenchmark.benchmarks.tpch.TPCHConstants;
 import com.oltpbenchmark.benchmarks.tpch.TPCHUtil;
 import com.oltpbenchmark.util.RandomGenerator;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -63,11 +64,11 @@ public class Q11 extends GenericQuery {
         String nation = TPCHUtil.choice(TPCHConstants.N_NAME, rand);
 
         // FRACTION is chosen as 0.0001 / SF
-        double fraction = 0.0001 / scaleFactor;
+        BigDecimal fraction = BigDecimal.valueOf(0.0001 / scaleFactor);
 
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, nation);
-        stmt.setDouble(2, fraction);
+        stmt.setBigDecimal(2, fraction);
         stmt.setString(3, nation);
         return stmt;
     }
