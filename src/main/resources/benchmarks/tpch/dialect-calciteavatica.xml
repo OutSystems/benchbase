@@ -593,43 +593,43 @@
         <procedure name="Q20">
             <statement name="query_stmt">
                 SELECT
-                "s_name",
-                "s_address"
+                    "s_name",
+                    "s_address"
                 FROM
-                "benchbase"."supplier",
-                "benchbase"."nation"
+                    "benchbase"."supplier",
+                    "benchbase"."nation"
                 WHERE
-                "s_suppkey" IN
+                    "s_suppkey" IN
                 (
                 SELECT
-                "ps_suppkey"
+                    "ps_suppkey"
                 FROM
-                "benchbase"."partsupp"
+                    "benchbase"."partsupp"
                 WHERE
-                "ps_partkey" IN
-                (
-                SELECT
-                "p_partkey"
-                FROM
-                "benchbase"."part"
-                WHERE
-                "p_name" LIKE 'green%'
-                )
-                AND "ps_availqty" &gt; (
-                SELECT
-                0.5 * SUM("l_quantity")
-                FROM
-                "benchbase"."lineitem"
-                WHERE
-                "l_partkey" = "ps_partkey"
-                AND "l_suppkey" = "ps_suppkey"
-                AND "l_shipdate" &gt;= DATE '1994-01-01'
-                AND "l_shipdate" &lt; DATE '1994-01-01' + INTERVAL '1' YEAR )
-                )
-                AND "s_nationkey" = "n_nationkey"
-                AND "n_name" = 'BRAZIL'
+                    "ps_partkey" IN
+                    (
+                        SELECT
+                            "p_partkey"
+                        FROM
+                            "benchbase"."part"
+                        WHERE
+                            "p_name" LIKE ?
+                    )
+                    AND "ps_availqty" &gt; (
+                        SELECT
+                            0.5 * SUM("l_quantity")
+                        FROM
+                            "benchbase"."lineitem"
+                        WHERE
+                            "l_partkey" = "ps_partkey"
+                            AND "l_suppkey" = "ps_suppkey"
+                            AND "l_shipdate" &gt;= TO_DATE(?, 'YYYY-MM-DD')
+                            AND "l_shipdate" &lt; TO_DATE(?, 'YYYY-MM-DD') + INTERVAL '1' YEAR )
+                    )
+                    AND "s_nationkey" = "n_nationkey"
+                    AND "n_name" = ?
                 ORDER BY
-                "s_name"
+                    "s_name"
             </statement>
         </procedure>
 
