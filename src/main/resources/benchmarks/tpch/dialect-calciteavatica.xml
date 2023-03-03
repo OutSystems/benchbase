@@ -490,21 +490,21 @@
         <procedure name="Q17">
             <statement name="query_stmt">
                 SELECT
-                SUM("l_extendedprice") / 7.0 AS avg_yearly
+                    CAST((SUM("l_extendedprice") / 7.0) AS NUMERIC) AS avg_yearly
                 FROM
-                "benchbase"."lineitem",
-                "benchbase"."part"
+                    "benchbase"."lineitem",
+                    "benchbase"."part"
                 WHERE
-                "p_partkey" = "l_partkey"
-                AND "p_brand" = ?
-                AND "p_container" = ?
-                AND "l_quantity" &lt; (
-                SELECT
-                0.2 * AVG("l_quantity")
-                FROM
-                "benchbase"."lineitem"
-                WHERE
-                "l_partkey" = "p_partkey" )
+                    "p_partkey" = "l_partkey"
+                    AND "p_brand" = ?
+                    AND "p_container" = ?
+                    AND "l_quantity" &lt; (
+                        SELECT
+                        0.2 * AVG("l_quantity")
+                        FROM
+                        "benchbase"."lineitem"
+                        WHERE
+                        "l_partkey" = "p_partkey" )
             </statement>
         </procedure>
 
