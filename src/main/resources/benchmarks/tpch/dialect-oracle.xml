@@ -106,11 +106,32 @@
             </statement>
         </procedure>
 
-<!--        <procedure name="Q4">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
+        <procedure name="Q4">
+            <statement name="query_stmt">
+                SELECT
+                    o_orderpriority,
+                    COUNT(*) AS order_count
+                FROM
+                    orders
+                WHERE
+                    o_orderdate >= ?
+                    AND o_orderdate &lt; ? + INTERVAL '3' MONTH
+                    AND EXISTS
+                    (
+                    SELECT
+                        *
+                    FROM
+                        lineitem
+                    WHERE
+                        l_orderkey = o_orderkey
+                        AND l_commitdate &lt; l_receiptdate
+                    )
+                GROUP BY
+                    o_orderpriority
+                ORDER BY
+                    o_orderpriority
+            </statement>
+        </procedure>
 
 <!--        <procedure name="Q5">-->
 <!--            <statement name="query_stmt">-->
