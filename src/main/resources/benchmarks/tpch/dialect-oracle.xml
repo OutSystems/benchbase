@@ -162,11 +162,19 @@
             </statement>
         </procedure>
 
-<!--        <procedure name="Q6">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
+        <procedure name="Q6">
+            <statement name="query_stmt">
+                SELECT
+                    SUM(l_extendedprice * l_discount) AS revenue
+                FROM
+                    lineitem
+                WHERE
+                    l_shipdate >= ?
+                    AND l_shipdate &lt; ? + INTERVAL '1' YEAR
+                    AND l_discount BETWEEN ? - 0.01 AND ? + 0.01
+                    AND l_quantity &lt; ?
+            </statement>
+        </procedure>
 
 <!--        <procedure name="Q7">-->
 <!--            <statement name="query_stmt">-->
