@@ -316,189 +316,42 @@
             </statement>
         </procedure>
 
-<!--        <procedure name="Q10">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q12">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q13">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q14">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q18">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q20">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q21">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q22">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure><procedure name="Q3">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q4">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q5">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q6">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q7">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q8">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q9">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q10">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q12">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q13">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q14">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q18">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q20">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q21">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q22">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q3">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q4">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q5">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q6">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q7">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q8">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q9">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q10">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
+        <procedure name="Q10">
+            <statement name="query_stmt">
+                SELECT
+                    c_custkey,
+                    c_name,
+                    SUM(l_extendedprice * (1 - l_discount)) AS revenue,
+                    c_acctbal,
+                    n_name,
+                    c_address,
+                    c_phone,
+                    c_comment
+                FROM
+                    customer,
+                    orders,
+                    lineitem,
+                    nation
+                WHERE
+                    c_custkey = o_custkey
+                    AND l_orderkey = o_orderkey
+                    AND o_orderdate >= ?
+                    AND o_orderdate &lt; ? + INTERVAL '3' MONTH
+                    AND l_returnflag = 'R'
+                    AND c_nationkey = n_nationkey
+                GROUP BY
+                    c_custkey,
+                    c_name,
+                    c_acctbal,
+                    c_phone,
+                    n_name,
+                    c_address,
+                    c_comment
+                ORDER BY
+                    revenue DESC
+                FETCH FIRST 20 ROWS ONLY
+            </statement>
+        </procedure>
 
 <!--        <procedure name="Q12">-->
 <!--            <statement name="query_stmt">-->
@@ -545,90 +398,6 @@
 
 <!--            </statement>-->
 <!--        </procedure>-->
-
-<!--        <procedure name="Q4">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q5">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q6">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q7">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q8">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q9">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q10">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q12">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q13">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q14">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q18">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q20">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q21">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
-<!--        <procedure name="Q22">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
-
+        
     </dialect>
 </dialects>
