@@ -353,11 +353,46 @@
             </statement>
         </procedure>
 
-<!--        <procedure name="Q12">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
+        <procedure name="Q12">
+            <statement name="query_stmt">
+                SELECT
+                    l_shipmode,
+                    SUM(
+                        CASE
+                            WHEN
+                                o_orderpriority = '1-URGENT' OR o_orderpriority = '2-HIGH'
+                            THEN
+                                1
+                            ELSE
+                                0
+                        END
+                    ) AS high_line_count,
+                    SUM(
+                        CASE
+                            WHEN
+                                o_orderpriority &lt;> '1-URGENT' AND o_orderpriority &lt;> '2-HIGH'
+                            THEN
+                                1
+                            ELSE
+                                0
+                        END
+                    ) AS low_line_count
+                FROM
+                    orders,
+                    lineitem
+                WHERE
+                    o_orderkey = l_orderkey
+                    AND l_shipmode IN (?, ?)
+                    AND l_commitdate &lt; l_receiptdate
+                    AND l_shipdate &lt; l_commitdate
+                    AND l_receiptdate >= ?
+                    AND l_receiptdate &lt; ? + INTERVAL '1' YEAR
+                GROUP BY
+                    l_shipmode
+                ORDER BY
+                    l_shipmode
+            </statement>
+        </procedure>
 
 <!--        <procedure name="Q13">-->
 <!--            <statement name="query_stmt">-->
