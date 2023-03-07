@@ -422,11 +422,27 @@
             </statement>
         </procedure>
 
-<!--        <procedure name="Q14">-->
-<!--            <statement name="query_stmt">-->
-
-<!--            </statement>-->
-<!--        </procedure>-->
+        <procedure name="Q14">
+            <statement name="query_stmt">
+                SELECT
+                    100.00 * SUM(
+                        CASE
+                            WHEN
+                                p_type LIKE 'PROMO%'
+                            THEN
+                                l_extendedprice * (1 - l_discount)
+                            ELSE
+                                0
+                            END
+                ) / SUM(l_extendedprice * (1 - l_discount)) AS promo_revenue
+                FROM
+                    lineitem, part
+                WHERE
+                    l_partkey = p_partkey
+                    AND l_shipdate >= ?
+                    AND l_shipdate &lt; ? + INTERVAL '1' MONTH
+            </statement>
+        </procedure>
 
 <!--        <procedure name="Q18">-->
 <!--            <statement name="query_stmt">-->
